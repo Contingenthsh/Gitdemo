@@ -10,14 +10,13 @@ create table user(
 
 --文档表
 create table document (
-    id primary key,
-    title varchar(200) not null,
-    user_id not null,
-    content longtext,
-    directory_id not null,
-    user_id not null,
-    create_time datetime default current_timestamp,
-    update_time datetime default current_timestamp on update current_timestamp,
+    id bigint auto_increment primary key comment '文档ID',
+    title varchar(200) not null comment '文档标题',
+    user_id bigint not null comment '创建用户ID',
+    content longtext comment '文档内容',
+    directory_id bigint not null comment '所属目录ID',
+    create_time datetime default current_timestamp comment '创建时间',
+    update_time datetime default current_timestamp on update current_timestamp comment '更新时间',
 );
 
 --目录表
