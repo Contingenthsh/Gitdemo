@@ -30,10 +30,23 @@ create table directory(
 
 --文档版本表
 create table document_version (
-    id,
-    doc_id not null,
+    id bigint primary key auto_increment ,
+    document_id bigint not null,
     content longtext,
     version_num int not null,
     operator_id not null,
     create_time datetime default current_timestamp,
+    version_no int not null ,
+    comment varchar(300) ,
 );
+
+--权限表
+create table permission (
+    id bigint primary key  auto_increment ,
+    user_id bigint not null ,
+    resource_type int not null,
+    resource_id bigint not null,
+    permission_type int not null,
+    created_at datetime default current_timestamp ,
+    foreign key (uesr_id) references user(id),
+)
