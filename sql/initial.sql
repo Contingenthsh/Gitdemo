@@ -2,7 +2,7 @@ create database if not exists doc_system default charset utf8mb4;
 use doc_system;
 --用户表
 create table `user`(
-    id bigint not null primary key comment '用户ID',
+    id bigint not null primary key auto_increment comment '用户ID',
     username varchar(50) not null unique comment '登录账号',
     password varchar (100) not null comment '加密密码',
     nickname varchar(50) comment '用户昵称',
