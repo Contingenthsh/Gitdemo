@@ -20,9 +20,11 @@ create table document (
     id bigint not null auto_increment comment '文档ID',
     title varchar(200) not null comment '文档标题',
     creator_id bigint not null comment '创建人ID',
-    content longtext comment '文档内容',
+    last_edit_user_id bigint comment '最后编辑人ID',
     folder_id bigint not null comment '所属目录ID',
-    status tinyint not null default '1' comment '1正常 0删除',
+    doc_type tinyint not null default 1 comment '文档类型 1=Markdown 2=表格 3=富文本',
+    status tinyint not null default '1' comment '1正常 2归档 0禁用',
+    is_deleted tinyint not null default 0 comment '0未删除 1已删除',
     create_time datetime default current_timestamp comment '创建时间',
     update_time datetime default current_timestamp on update current_timestamp comment '更新时间',
     primary key (id),
@@ -37,10 +39,14 @@ create table directory(
     sort int not null default '0' comment '排序',
     creator_id bigint not null comment '创建人id',
     parent_id bigint not null default '0' comment '父目录id 0=根目录',
+    path varchar(500) not null default '' comment '目录路径，如/1/3/5/',
+    level tinyint not null default 0 comment '目录层级，根目录为0',
+    is_deleted tinyint not null default 0 comment '0未删除 1已删除',
     create_time datetime default current_timestamp comment '创建时间',
     update_time datetime not null default current_timestamp on update current_timestamp comment '更新时间',
     primary key (id),
-    key idx_parent_id (parent_id)
+    key idx_parent_id (parent_id),
+    key idx_path (path(255))
 )engine=innodb default charset=utf8mb4 comment='文档目录表';
 
 --文档版本表
@@ -51,8 +57,9 @@ create table document_version (
     version_num int not null comment '版本号',
     operator_id bigint not null comment '操作人ID',
     create_time datetime default current_timestamp comment '版本生成时间',
+    version_note varchar(200) default '' comment '版本变更说明',
     primary key(id),
-    key idx_doc_id (doc_id)
+    key idx_doc_id (doc_id, version_num)
 )engine=innodb default charset=utf8mb4 comment='文档版本表';
 
 --文档权限表
@@ -62,8 +69,11 @@ create table permission (
     resource_type int not null comment '资源类型 1=文档 2=目录',
     resource_id bigint not null comment '资源ID',
     permission_type int not null comment '权限类型 1=查看 2=编辑 3=管理',
+    expire_time datetime comment '权限过期时间，NULL表示永久有效',
+    is_deleted tinyint not null default 0 comment '0有效 1已回收',
     created_at datetime default current_timestamp comment '创建时间',
     primary key (id),
     key idx_user_id(user_id),
-    key idx_resource (resource_type,resource_id)
+    key idx_resource (resource_type,resource_id),
+    unique key uk_permission (user_id, resource_type, resource_id, is_deleted)
 )engine=innodb default charset=utf8mb4 comment='文档权限表';
