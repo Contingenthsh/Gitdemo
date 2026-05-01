@@ -1,6 +1,5 @@
 <template>
   <el-container class="main-container">
-    <!-- 顶部导航 -->
     <el-header class="header">
       <span class="logo">协同文档知识库</span>
       <div class="user-area">
@@ -9,11 +8,9 @@
       </div>
     </el-header>
     <el-container class="body-container">
-      <!-- 左侧目录树 -->
       <el-aside width="260px" class="aside">
         <DirTree @select-doc="handleSelectDoc" />
       </el-aside>
-      <!-- 右侧内容区 -->
       <el-main class="main-content">
         <div class="search-bar">
           <el-input v-model="searchKey" placeholder="搜索文档..." prefix-icon="Search" clearable />
