@@ -3,3 +3,23 @@
 *.iml
 *.iws
 *.ipr
+# 前端构建产物
+dist/
+build/
+
+# 依赖包
+node_modules/
+
+# 日志文件
+*.log
+npm-debug.log*
+
+# IDE/编辑器配置
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# 系统文件
+.DS_Store
+Thumbs.db
